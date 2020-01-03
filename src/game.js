@@ -10,7 +10,7 @@ const GAMESTATE = {
   RUNNING: 1,
   MENU: 2,
   GAMEOVER: 3,
-  NEWLEVEL: 4,
+  NEWLEVEL: 4
 };
 
 export default class Game {
@@ -31,12 +31,15 @@ export default class Game {
   }
 
   start() {
-    if (this.gamestate !== GAMESTATE.MENU && 
-    this.gamestate !== GAMESTATE.NEWLEVEL) return;
+    if (
+      this.gamestate !== GAMESTATE.MENU &&
+      this.gamestate !== GAMESTATE.NEWLEVEL
+    )
+      return;
 
-    this.bricks = buildLevel(this, this.levels[this.currentLevels]);
+    this.bricks = buildLevel(this, this.levels[this.currentLevel]);
     this.ball.reset();
-    this.gameObjects = [this.ball, this.paddle, ...bricks];
+    this.gameObjects = [this.ball, this.paddle];
 
     this.gamestate = GAMESTATE.RUNNING;
   }
@@ -46,34 +49,30 @@ export default class Game {
 
     if (
       this.gamestate === GAMESTATE.PAUSED ||
-      this.gameState === GAMESTATE.MENU ||
-      this.gameState === GAMESTATE.GAMEOVER
+      this.gamestate === GAMESTATE.MENU ||
+      this.gamestate === GAMESTATE.GAMEOVER
     )
       return;
 
-      if(this.bricks.length === 0) {
-        this.currentLevel++;
-        this.gamestate = GAMESTATE.NEWLEVEL;
-        this.start();
-      }
+    if (this.bricks.length === 0) {
+      this.currentLevel++;
+      this.gamestate = GAMESTATE.NEWLEVEL;
+      this.start();
+    }
 
-    [...this.gameObjects, ...this.bricks].forEach(object => object.update(deltaTime));
-
-    this.bricks = this.bricks.filter(brick => !brick.markedForDeltion
+    [...this.gameObjects, ...this.bricks].forEach(object =>
+      object.update(deltaTime)
     );
+
+    this.bricks = this.bricks.filter(brick => !brick.markedForDeletion);
   }
 
   draw(ctx) {
     [...this.gameObjects, ...this.bricks].forEach(object => object.draw(ctx));
 
-    if (
-      this.gamestate === GAMESTATE.PAUSED ||
-      this.gamestate == GAMESTATE.MENU
-    ) {
+    if (this.gamestate === GAMESTATE.PAUSED) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
-      ctx.fillStyle = "rgba(0,0,0,0)";
-      this.position = { x: 10, y: 400 };
-      this.speed = { x: 4, y: -2 };.5)";
+      ctx.fillStyle = "rgba(0,0,0,0.5)";
       ctx.fill();
 
       ctx.font = "30px Arial";
@@ -95,8 +94,7 @@ export default class Game {
         this.gameWidth / 2,
         this.gameHeight / 2
       );
-     }
-
+    }
     if (this.gamestate === GAMESTATE.GAMEOVER) {
       ctx.rect(0, 0, this.gameWidth, this.gameHeight);
       ctx.fillStyle = "rgba(0,0,0,1)";
@@ -105,16 +103,15 @@ export default class Game {
       ctx.font = "30px Arial";
       ctx.fillStyle = "white";
       ctx.textAlign = "center";
-      ctx.fillText("GAME OVER", this.gameWidth / 2, this.gameHeight / 2
-      );
+      ctx.fillText("GAME OVER", this.gameWidth / 2, this.gameHeight / 2);
     }
   }
-}
 
-togglePause() {
-  if (this.gamestate = GAMESTATE.PAUSED) {
-    this.gamestate = GAMESTATE.RUNNING;
-  } else {
-    this.gamestate = GAMESTATE.PAUSED;
+  togglePause() {
+    if (this.gamestate === GAMESTATE.PAUSED) {
+      this.gamestate === GAMESTATE.RUNNING;
+    } else {
+      this.gamestate === GAMESTATE.PAUSED;
+    }
   }
 }
