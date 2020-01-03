@@ -37,7 +37,7 @@ export default class Ball {
       this.speed.x = -this.speed.x;
     }
 
-    //wall on top or bottom
+    //wall on top
     if (this.position.y < 0) {
       this.speed.y = -this.speed.y;
     }
